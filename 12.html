@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Chat Box</title>
+    <style>
+        #chat-container {
+            width: 300px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .user {
+            background-color: #e6e6e6;
+            text-align: right;
+        }
+
+        .bot {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chat-container"></div>
+<input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKeyPress(event)">
+
+<script>
+    const botResponses = {
+        "hello": "Hello! How are you feeling today?",
+        "fine": "That's great to hear!",
+        "not good": "I'm sorry to hear that. Remember, it's okay not to be okay. Do you want to talk about it?",
+        "yes": "Feel free to share your thoughts. I'm here to listen.",
+        "no": "Okay, take your time. I'll be here if you change your mind."
+    };
+
+    function initiateChat() {
+        const greeting = "Hello! How can I help you today?";
+        appendMessage(greeting, 'bot');
+    }
+
+    function sendMessage() {
+        const userInput = document.getElementById('user-input');
+        const message = userInput.value.trim().toLowerCase();
+
+        if (message !== '') {
+            appendMessage(message, 'user');
+            respondToUser(message);
+            userInput.value = '';
+        }
+    }
+
+    function respondToUser(message) {
+        let response = botResponses[message];
+        if (!response) {
+            response = "I'm sorry, I didn't understand that. Can you rephrase or ask something else?";
+        }
+        setTimeout(() => {
+            appendMessage(response, 'bot');
+        }, 500);
+    }
+
+    function appendMessage(message, sender) {
+        const chatContainer = document.getElementById('chat-container');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender);
+        messageElement.innerText = message;
+        chatContainer.appendChild(messageElement);
+
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initiateChat);
+</script>
+
+</body>
+</html>
